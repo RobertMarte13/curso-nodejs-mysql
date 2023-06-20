@@ -1,0 +1,36 @@
+Importante saber que para optimizar un poco mejor el codigo y que se vea mas limpio hacemos lo siguiente, usamos los controller estas son funciones las cuales gestionaran las peticiones de las url visitadas.
+
+primero tendriamos el archivo padre que podria ser donde se definen o se crea el servidor, luego las rutas que se pueden visitar, y por ultimo los controlladores que son funciones que gestionan las peticiones del cliente al servidor.
+
+Documento employe.controller.js linea 10:
+const [rows] = await pool.query('SELECT * FROM employee WHERE id = ?', [req.params.id])
+- Aqui saltandome varias expplicaciones que se hace mas abajo lo que cabe destacar aqui es que estoy obteniendo un empleado por medio de un id.
+- Primero lo que hacemos es que con un query indicamos con SELECT * FROM employee que de la tabla todas sus propiedades si hay una que sea igual esto con (WHERE id = ?), si es igual al id que le pasamos [req.params.id],  entonces de vuelvemelo.
+
+Documento employees.controller.js linea 24:
+const [rows] = await pool.query('INSERT INTO employee(name, salary) VALUES (?, ?)', [name, salary])
+
+- Lo que estamos haciendo es sacar el rows del objeto que nos devuelve el query con el pool.
+
+- luego como todas las peticiones que hacemos son asincronas no importa si la peticion es get, post, put, delete, esta tiene que ser gestionada por un await y una funcion asincrona.
+
+- dentro del metodo query lo que le estoy indicando es que va hacer una insercion, luego un into a la fila employee, dentro de employe va a resivir dos propiedades, el name y el salary y luego esas propiedades van a resivir sus respectivos valores que son dos.
+
+- encerrando y luego poniendo una coma lo que va a resive estara dentro de un objeto. y si lo que va a resivir es un objeto pues lo que hacemos es que dentro de ese objeto pondremos el name y el salary para esta prueba.
+
+Documento employees.controller.js linea 39:
+const [rows] = await pool.query('DELETE FROM employee WHERE id = ?', [req.params.id])
+- Aqui iremos directo al grano ya que muchas de las cosas que se ven arriba se explican.
+- Para empezar aqui lo quee estamos haciendo es eliminar un empleado por medio de un id como tambien lo hariamos para obtener un empleado, solo que cambia la forma en que se lo pedimos a mi base de datos.
+- Para pedirle que elimine le digo dentro de query que (DELETE FROM employee WHERE id = ?), [req.params.id], Esto lo que le dise a la base de datos es, de todos los elementos o propiedades de employee elimina el que tenga un id igual al que le estoy pasando.
+
+Documento employees.controller.js linea 56:
+const [result] = await pool.query('UPDATE employee SET name = IFNULL(?, name), salary = IFNULL(?, salary) WHERE id = ?', [name, salary, id])
+- Lo que le estamos indicando o pasando al metodo query de pool es que va hacer un update que es una actualizacion en la base de datos, aparte va a resivir los datos que va a actualizar y como la peticion es de tipo patch lo que podemos hacer es actualizar tanto un campo como otro.
+- Lo que significa el IFNULL es que si es null el dato que nos manda el client llo que va hacer es usar ese dato que ya habia guardado y mandenerlo.
+- Luego por medio de un id identificaremos al usuario que queremos modificar.
+
+*** PARA MANEJAR LOS ERROES QUE PUEDAN SURGIR EN LAS CONSULTAS A LA BASE DE DATOS PODEMOS HACER LO SIGUIENTE: ***
+- Envolver la consulta en un try catch para que cuando todo salga bien ejecute el try pero si algo sale mal pues ejecutara el catch.
+
+IMPORTANTE INSTALAR dotenv para las variables de entorno.

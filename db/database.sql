@@ -14,3 +14,8 @@ CREATE TABLE employee (
 );
 
 DESCRIBE employee;
+
+INSERT INTO employee (name, salary) VALUES 
+  ("Robert", 3000),
+  ("John", 4000),
+  ("Mary", 5000);
